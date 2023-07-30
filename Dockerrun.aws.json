@@ -1,0 +1,104 @@
+{
+    "AWSEBDockerrunVersion": 2,
+    "containerDefinitions": [
+      {
+        "name": "multi-nginx",
+        "image": "public.ecr.aws/m4x4f7z6/docker-multi-test:multi-nginx",
+        "essential": true,
+        "memory": 128,
+        "portMappings": [
+            {
+              "hostPort": 80,
+              "containerPort": 3050
+            }
+          ]
+      },
+      {
+        "name": "multi-client",
+        "image": "public.ecr.aws/m4x4f7z6/docker-multi-test:multi-client",
+        "essential": true,
+        "memory": 128,
+        "links": [
+            "multi-nginx",
+            "multi-server"
+        ]
+      },
+      {
+        "name": "multi-server",
+        "image": "public.ecr.aws/m4x4f7z6/docker-multi-test:multi-server",
+        "essential": true,
+        "memory": 128,
+        "links": [
+            "multi-nginx",
+            "multi-client",
+            "postgres",
+            "redis"
+        ],
+        "environment": [
+            {
+                "name":"REDIS_HOST",
+                "value":"redis"},
+            {
+                "name":"REDIS_PORT",
+                "value":6379},
+            {
+                "name":"PGUSER",
+                "value":"postgres"},
+            {
+                "name":"PGHOST",
+                "value":"postgres"},
+            {
+                "name":"PGDATABASE",
+                "value":"postgres"},
+            {
+                "name":"PGPASSWORD",
+                "value":"postgres_password"},
+            {
+                "name":"PGPORT",
+                "value":5432}
+          ]
+
+      },
+      {
+        "name": "multi-worker",
+        "image": "public.ecr.aws/m4x4f7z6/docker-multi-test:multi-worker",
+        "essential": true,
+        "memory": 128,
+        "links": [
+            "redis"
+        ],
+        "environment": [
+            {
+                "name":"REDIS_HOST",
+                "value":"redis"},
+            {
+                "name":"REDIS_PORT",
+                "value":6379}
+          ]
+
+      },
+      {
+        "name": "postgres",
+        "image": "postgres",
+        "essential": true,
+        "memory": 128,
+        "links": [
+            "multi-server"
+        ]
+
+      },
+      {
+        "name": "redis",
+        "image": "redis:4.0.11",
+        "essential": true,
+        "memory": 128,
+        "links": [
+            "multi-server",
+            "multi-worker"
+        ]
+
+      }
+
+    ]
+  }
+

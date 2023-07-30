@@ -1,0 +1,29 @@
+sudo: required
+services:
+  - docker
+
+# this portion is only for testing
+before_install: 
+  - docker build -t react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run -e CI=true react-test npm run test
+# end testing part here
+
+after_success: 
+  - docker build -t multi-client ./client
+  - docker build -t multi-server./server
+  - docker build -t multi-nginx ./nginx
+  - docker build -t multi-worker ./worker
+
+deploy:
+  provider: elasticbeanstalk
+  region: "eu-central-1"
+  app: "docker-multi-react"
+  env: "Docker-multi-react-env"
+  bucket_name: "elasticbeanstalk-eu-central-1-156173772875"
+  bucket_path: "docker-react"
+  on:
+    branch: main
+  access_key_id: $AWS_ACCESS_KEY
+  secret-acces-key: $AWS_SECRET_KEY
