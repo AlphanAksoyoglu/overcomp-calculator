@@ -11,10 +11,19 @@ script:
 # end testing part here
 
 after_success: 
-  - docker build -t multi-client ./client
-  - docker build -t multi-server./server
-  - docker build -t multi-nginx ./nginx
-  - docker build -t multi-worker ./worker
+  - ./aws-ecs.sh
+  # - docker build -t multi-server ./server
+  # - docker build -t multi-nginx ./nginx
+  # - docker build -t multi-worker ./worker
+  # - docker tag multi-client public.ecr.aws/m4x4f7z6/docker-multi-test:multi-client
+  # - docker tag multi-server public.ecr.aws/m4x4f7z6/docker-multi-test:multi-server
+  # - docker tag multi-nginx public.ecr.aws/m4x4f7z6/docker-multi-test:multi-nginx
+  # - docker tag multi-worker public.ecr.aws/m4x4f7z6/docker-multi-test:multi-worker
+  # - docker push public.ecr.aws/m4x4f7z6/docker-multi-test:multi-client
+  # - docker push public.ecr.aws/m4x4f7z6/docker-multi-test:multi-server
+  # - docker push public.ecr.aws/m4x4f7z6/docker-multi-test:multi-nginx
+  # - docker push public.ecr.aws/m4x4f7z6/docker-multi-test:multi-worker
+
 
 deploy:
   provider: elasticbeanstalk
@@ -22,7 +31,7 @@ deploy:
   app: "docker-multi-react"
   env: "Docker-multi-react-env"
   bucket_name: "elasticbeanstalk-eu-central-1-156173772875"
-  bucket_path: "docker-react"
+  bucket_path: "docker-multi-react"
   on:
     branch: main
   access_key_id: $AWS_ACCESS_KEY
