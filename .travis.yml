@@ -11,6 +11,14 @@ services:
 #   - docker run -e CI=true react-test npm run test
 # # end testing part here
 
+before_install:
+  - curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+  - unzip awscliv2.zip
+  - sudo ./aws/install
+
+env:
+  - PATH=$PATH:/usr/local/aws-cli/v2/current/bin
+
 script: 
   - chmod +x ./aws-ecs.sh
   - ./aws-ecs.sh
