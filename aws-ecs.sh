@@ -19,7 +19,7 @@ wait
 docker tag multi-worker public.ecr.aws/m4x4f7z6/docker-multi-test:multi-worker
 wait
 echo GETTING AUTH
-aws ecr-public get-login-password --region eu-central-1 | docker login --username AWS --password-stdin public.ecr.aws
+docker login --username AWS -p $(aws ecr-public get-login-password --region eu-central-1) public.ecr.aws
 echo PUSHING IMAGES
 docker push public.ecr.aws/m4x4f7z6/docker-multi-test:multi-client
 wait
