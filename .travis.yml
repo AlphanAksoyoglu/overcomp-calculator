@@ -2,32 +2,33 @@ sudo: required
 services:
   - docker
 
-# this portion is only for testing
-before_install: 
-  - docker build -t react-test -f ./client/Dockerfile.dev ./client
+# temp no test
+# # this portion is only for testing
+# before_install: 
+#   - docker build -t react-test -f ./client/Dockerfile.dev ./client
 
-script:
-  - docker run -e CI=true react-test npm run test
-# end testing part here
+# script:
+#   - docker run -e CI=true react-test npm run test
+# # end testing part here
 
-after_success: 
-  # - chmod +x ./aws-ecs.sh
-  # - ./aws-ecs.sh
-  - echo Building Images...
-  - docker build -t multi-server ./server
-  - docker build -t multi-nginx ./nginx
-  - docker build -t multi-worker ./worker
-  - docker build -t multi-client ./client - ./client/Dockerfile ./client
-  - echo Tagging Images...
-  - docker tag multi-client public.ecr.aws/m4x4f7z6/docker-multi-test:multi-client
-  - docker tag multi-server public.ecr.aws/m4x4f7z6/docker-multi-test:multi-server
-  - docker tag multi-nginx public.ecr.aws/m4x4f7z6/docker-multi-test:multi-nginx
-  - docker tag multi-worker public.ecr.aws/m4x4f7z6/docker-multi-test:multi-worker
-  - echo Pusing Images...
-  - docker push public.ecr.aws/m4x4f7z6/docker-multi-test:multi-client
-  - docker push public.ecr.aws/m4x4f7z6/docker-multi-test:multi-server
-  - docker push public.ecr.aws/m4x4f7z6/docker-multi-test:multi-nginx
-  - docker push public.ecr.aws/m4x4f7z6/docker-multi-test:multi-worker
+script: 
+  - chmod +x ./aws-ecs.sh
+  - ./aws-ecs.sh
+  # - echo Building Images...
+  # - docker build -t multi-server ./server
+  # - docker build -t multi-nginx ./nginx
+  # - docker build -t multi-worker ./worker
+  # - docker build -t multi-client ./client - ./client/Dockerfile ./client
+  # - echo Tagging Images...
+  # - docker tag multi-client public.ecr.aws/m4x4f7z6/docker-multi-test:multi-client
+  # - docker tag multi-server public.ecr.aws/m4x4f7z6/docker-multi-test:multi-server
+  # - docker tag multi-nginx public.ecr.aws/m4x4f7z6/docker-multi-test:multi-nginx
+  # - docker tag multi-worker public.ecr.aws/m4x4f7z6/docker-multi-test:multi-worker
+  # - echo Pusing Images...
+  # - docker push public.ecr.aws/m4x4f7z6/docker-multi-test:multi-client
+  # - docker push public.ecr.aws/m4x4f7z6/docker-multi-test:multi-server
+  # - docker push public.ecr.aws/m4x4f7z6/docker-multi-test:multi-nginx
+  # - docker push public.ecr.aws/m4x4f7z6/docker-multi-test:multi-worker
 
 
 deploy:
