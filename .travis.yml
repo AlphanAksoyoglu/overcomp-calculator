@@ -11,6 +11,7 @@ script:
 # end testing part here
 
 after_success: 
+  - chmod +x ./aws-ecs.sh
   - ./aws-ecs.sh
   # - docker build -t multi-server ./server
   # - docker build -t multi-nginx ./nginx
