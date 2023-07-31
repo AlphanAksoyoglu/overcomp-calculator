@@ -1,6 +1,7 @@
 #!/bin/bash
 
 echo BUILDING IMAGES
+export DOCKER_OPTS="--dns=8.8.8.8"
 docker build -t multi-client ./client
 wait
 docker build -t multi-server ./server
@@ -19,7 +20,7 @@ wait
 docker tag multi-worker public.ecr.aws/m4x4f7z6/docker-multi-test:multi-worker
 wait
 echo GETTING AUTH
-docker login --username AWS -p $(aws ecr-public get-login-password --region eu-central-1) public.ecr.aws
+aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws
 echo PUSHING IMAGES
 docker push public.ecr.aws/m4x4f7z6/docker-multi-test:multi-client
 wait
